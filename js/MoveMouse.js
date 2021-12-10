@@ -1,9 +1,17 @@
+/*!
+ * Fairy Dust Cursor.js
+ * - 90's cursors collection
+ * -- https://github.com/tholman/90s-cursor-effects
+ * -- http://codepen.io/tholman/full/jWmZxZ/
+ */
+
+//鼠标点击雪花特效
 (function fairyDustCursor() {
 
     var possibleColors = ["#D61C59", "#E7D84B", "#1B8798"]
     var width = window.innerWidth;
     var height = window.innerHeight;
-    var cursor = {x: width/2, y: width/2};
+    var cursor = { x: width / 2, y: width / 2 };
     var particles = [];
 
     function init() {
@@ -26,9 +34,9 @@
     }
 
     function onTouchMove(e) {
-        if( e.touches.length > 0 ) {
-            for( var i = 0; i < e.touches.length; i++ ) {
-                addParticle( e.touches[i].clientX, e.touches[i].clientY, possibleColors[Math.floor(Math.random()*possibleColors.length)]);
+        if (e.touches.length > 0) {
+            for (var i = 0; i < e.touches.length; i++) {
+                addParticle(e.touches[i].clientX, e.touches[i].clientY, possibleColors[Math.floor(Math.random() * possibleColors.length)]);
             }
         }
     }
@@ -37,7 +45,7 @@
         cursor.x = e.clientX;
         cursor.y = e.clientY;
 
-        addParticle( cursor.x, cursor.y, possibleColors[Math.floor(Math.random()*possibleColors.length)]);
+        addParticle(cursor.x, cursor.y, possibleColors[Math.floor(Math.random() * possibleColors.length)]);
     }
 
     function addParticle(x, y, color) {
@@ -48,12 +56,14 @@
 
     function updateParticles() {
 
-        for( var i = 0; i < particles.length; i++ ) {
+        // Updated
+        for (var i = 0; i < particles.length; i++) {
             particles[i].update();
         }
 
-        for( var i = particles.length -1; i >= 0; i-- ) {
-            if( particles[i].lifeSpan < 0 ) {
+        // Remove dead particles
+        for (var i = particles.length - 1; i >= 0; i--) {
+            if (particles[i].lifeSpan < 0) {
                 particles[i].die();
                 particles.splice(i, 1);
             }
@@ -66,11 +76,15 @@
         updateParticles();
     }
 
+    /**
+     * Particles
+     */
+
     function Particle() {
 
         this.character = "*";
         this.lifeSpan = 120; //ms
-        this.initialStyles ={
+        this.initialStyles = {
             "position": "fixed",
             "top": "0", //必须加
             "display": "block",
@@ -80,16 +94,16 @@
             "will-change": "transform"
         };
 
+        // Init, and set properties
         this.init = function(x, y, color) {
 
             this.velocity = {
-                x:  (Math.random() < 0.5 ? -1 : 1) * (Math.random() / 2),
+                x: (Math.random() < 0.5 ? -1 : 1) * (Math.random() / 2),
                 y: 1
             };
 
-            this.position = {x: x - 10, y: y - 20};
+            this.position = { x: x - 10, y: y - 20 };
             this.initialStyles.color = color;
-            console.log(color);
 
             this.element = document.createElement('span');
             this.element.innerHTML = this.character;
@@ -113,9 +127,14 @@
 
     }
 
-    function applyProperties( target, properties ) {
-        for( var key in properties ) {
-            target.style[ key ] = properties[ key ];
+    /**
+     * Utils
+     */
+
+    // Applies css `properties` to an element.
+    function applyProperties(target, properties) {
+        for (var key in properties) {
+            target.style[key] = properties[key];
         }
     }
 
